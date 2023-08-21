@@ -15,7 +15,7 @@ class Orders(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     car_dealer = models.ForeignKey(CarDealer, on_delete=models.PROTECT)
     rent = models.CharField(max_length=8)
-    vehicle = models.CharField(Vehicles, on_delete=models.PROTECT)
+    vehicle = models.ForeignKey(Vehicles, on_delete=models.PROTECT)
     days = models.CharField(max_length=3)
     is_complete = models.BooleanField(default=False)
     

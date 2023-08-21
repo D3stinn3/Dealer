@@ -18,12 +18,12 @@ def index_page(request):
     
 def login_page(request):
     context = {}
-    return render(request, 'customertemp/login.html', context)
+    return render(request, 'consumertemp/login.html', context)
 
 def auth_view(request):
     context = {}
     if request.user.is_authenticated:
-        return render(request, 'customertemp/home.html', context)
+        return render(request, 'consumertemp/home.html', context)
     else:
         username = request.POST['username']
         password = request.POST['password']
@@ -32,16 +32,16 @@ def auth_view(request):
             customer = Customer.objects.get(user=user)
         except:
             customer = None
-        if customer is not None and customer.is_active == True:
+        if customer is not None:
             auth.login(request, user)
-            return render(request, 'customertemp/home.html', context)
+            return render(request, 'consumertemp/home.html', context)
         else:
-            return render(request, 'customertemp/index.html', context)
+            return render(request, 'consumertemp/loginfail.html', context)
 
 def logout_page(request):
     context = {}
     auth.logout(request)
-    return render(request, 'customertemp/register.html', context)
+    return render(request, 'consumertemp/register.html', context)
 
 def register(request):
     context = {}
@@ -64,7 +64,7 @@ def registration(request):
         user.last_name = lastname
         user.save()
     except:
-        return render(request, 'customertemp/home.html')
+        return render(request, 'consumertemp/home.html')
     try:
         area = Area.objects.get(city=city, pincode=pincode)
     except:
@@ -78,12 +78,12 @@ def registration(request):
     
     context = {}
     customer.save()
-    return render(request, 'customertemp/register.html', context)
+    return render(request, 'consumertemp/registered.html', context)
 
 @login_required
 def search(request):
     context = {}
-    return render(request, 'customertemp/search.html', context)
+    return render(request, 'consumertemp/search.html', context)
 
 @login_required
 def searchResult(request):
@@ -99,7 +99,7 @@ def searchResult(request):
                 vehiclesList.append(vehicleDict)
     request.session['vehicles_list'] = vehiclesList
     context = {}
-    return render(request, 'customertemp/searchresult.html', context)
+    return render(request, 'consumertemp/searchresult.html', context)
 
 @login_required
 def bookVehicle(request):
@@ -107,7 +107,7 @@ def bookVehicle(request):
     vehicle = Vehicles.objects.get(id=id)
     costPerDay = int(vehicle.capacity)*3000
     context = {'vehicle': vehicle, 'cost_per_day': costPerDay}
-    return render(request, 'customertemp/confirmation.html', context)
+    return render(request, 'consumertemp/confirmation.html', context)
 
 @login_required
 def confirmBooking(request):
@@ -131,10 +131,10 @@ def confirmBooking(request):
         vehicle.is_available = False
         vehicle.save()
         context = {'order': order}
-        return render(request, 'customertemp/confirmed.html', context)
+        return render(request, 'consumertemp/confirmed.html', context)
     
     else:
-        return render(request, 'customertemp/orderfail.html')
+        return render(request, 'consumertemp/orderfail.html')
     
 @login_required
 def manage(request):
@@ -150,7 +150,7 @@ def manage(request):
                 orderDict = {'id': order.id, 'rent': order.rent, 'vehicle': order.vehicle, 'days': order.days, 'car_dealer': order.car_dealer}
                 order_list.append(orderDict)
     context = {'od': order_list}
-    return render(request, 'customertemp/manage.html', context)
+    return render(request, 'consumertemp/manage.html', context)
 
 @login_required
 def update_order(request):
@@ -165,7 +165,7 @@ def update_order(request):
     order.delete()
     costPerDay = int(vehicle.capacity)*3000
     context = {'vehicle': vehicle, 'cost_per_day': costPerDay}
-    return render(request, 'customertemp/confirmation.html', context)
+    return render(request, 'consumertemp/confirmation.html', context)
 
 @login_required
 def delete_order(request):
@@ -179,6 +179,6 @@ def delete_order(request):
     vehicle.save()
     order.delete()
     context = {}
-    return render(request, 'customertemp/manage.html', context)
+    return render(request, 'consumertemp/manage.html', context)
     
     
